@@ -1,0 +1,437 @@
+{
+	"info": {
+		"_postman_id": "fb70743d-73c6-4919-825e-aa08da43f02b",
+		"name": "DesafioServerest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Mostrar Produtos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Produtos encontrados\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{url}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/produtos",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"produtos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mostrar usuários",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Usuários encontrados\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/usuarios",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Adicionar usuários",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"const jsonMessage= pm.response.json();\r",
+							"pm.test(\"O Usuário já existe\", () => {\r",
+							"    pm.expect(pm.response.code).to.equal(400);\r",
+							"    pm.expect(jsonMessage).to.be.an(\"object\");\r",
+							"    pm.expect(jsonMessage.message).to.be.a(\"string\");\r",
+							"});\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"\r",
+							"    bodyData = JSON.parse(responseBody)\r",
+							"    id = bodyData._id\r",
+							"    console.log(id)\r",
+							"    var a =JSON.stringify(id);\r",
+							"    var result_id = a.replace(/[\" ]/g, '')\r",
+							"    pm.collectionVariables.set(\"usuario\", result_id);\r",
+							"})\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"Valores do Usuário são válidos\", () => {\r",
+							"  pm.expect(jsonData).to.be.an(\"object\");\r",
+							"  pm.expect(jsonData.message).to.be.a(\"string\");\r",
+							"  pm.expect(jsonData._id).to.be.a(\"string\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Desafio 1\",\r\n    \"email\": \"desafio@teste.com\",\r\n    \"password\": \"123456\",\r\n    \"administrador\": \"true\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/usuarios",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pegando Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"bodyData = JSON.parse(responseBody)\r",
+							"value = bodyData.authorization\r",
+							"console.log(value)\r",
+							"var b=JSON.stringify(value);\r",
+							"var result = b.replace(/\\bBearer\\b|[\" ]/g, '')\r",
+							"pm.collectionVariables.set(\"token\", result);\r",
+							"\r",
+							"\r",
+							"pm.test(\"Token sucesso\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"desafio@teste.com\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/Login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Adicionar produtos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonMessage= pm.response.json();\r",
+							"pm.test(\"O Produto já existe\", () => {\r",
+							"    pm.expect(pm.response.code).to.equal(400);\r",
+							"    pm.expect(jsonMessage).to.be.an(\"object\");\r",
+							"    pm.expect(jsonMessage.message).to.be.a(\"string\");\r",
+							"});\r",
+							"pm.test(\"Produto adicionado com sucesso\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"\r",
+							"    bodyData = JSON.parse(responseBody)\r",
+							"    id = bodyData._id\r",
+							"    console.log(id)\r",
+							"    var c =JSON.stringify(id);\r",
+							"    var result_id = c.replace(/[\" ]/g, '')\r",
+							"    pm.collectionVariables.set(\"_id\", result_id);\r",
+							"\r",
+							"})\r",
+							"\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"Valores dos produtos\", () => {\r",
+							"  pm.expect(jsonData).to.be.an(\"object\");\r",
+							"  pm.expect(jsonData.message).to.be.a(\"string\");\r",
+							"  pm.expect(jsonData._id).to.be.a(\"string\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Ipad9\",\r\n    \"preco\": \"5000\",\r\n    \"descricao\": \"Ipad Pró 10' 128gb \",\r\n    \"quantidade\": \"1000\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/produtos",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"produtos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Validando produto pelo ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Produto encontrado\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Produto não encontrado\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(400);\r",
+							"})\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"Valores do produto\", () => {\r",
+							"  pm.expect(jsonData).to.be.an(\"object\");\r",
+							"  pm.expect(jsonData.nome).to.be.a(\"string\");\r",
+							"  pm.expect(jsonData.preco).to.be.a(\"number\");\r",
+							"  pm.expect(jsonData.descricao).to.be.a(\"string\");\r",
+							"  pm.expect(jsonData.quantidade).to.be.a(\"number\");\r",
+							"  pm.expect(jsonData._id).to.be.a(\"string\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/produtos/{{_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"produtos",
+						"{{_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletando Usuários",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Usuário deletado\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"})\r",
+							"pm.test(\"Usuário não existe\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(400);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/usuarios/{{usuario}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"usuarios",
+						"{{usuario}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletando Produto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"bodyData = JSON.parse(responseBody)\r",
+							"    message = bodyData.message\r",
+							"    console.log(message)\r",
+							"    var c =JSON.stringify(message);\r",
+							"    if (message == \"Nenhum registro excluído\") {\r",
+							"        pm.test(\"Produto não existente\")\r",
+							"    }else{\r",
+							"        pm.test(\"Produto deletado\")\r",
+							"    }\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/produtos/{{_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"produtos",
+						"{{_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://serverest.dev"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "_id",
+			"value": ""
+		},
+		{
+			"key": "usuario",
+			"value": ""
+		}
+	]
+}
